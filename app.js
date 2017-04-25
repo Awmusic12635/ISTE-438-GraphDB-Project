@@ -61,6 +61,26 @@ app.get('/',function(req,res) {
 });
 
 // add data
+app.get('/movie/:id',function(req,res) {
+    var movieid = req.params.id;
+    console.log("Movie ID: " + movieid);
+    session
+        .run('MATCH(n:Movie) where ID(n)={idParam} RETURN n',{idParam:movieid})
+        .then(function(result) {
+            console.log("finished search");
+            console.dir(result[0]);
+            var record = result[0];
+            var movie = {
+                id: record._fields[0].identity.low,
+                title: record._fields[0].properties.title,
+                year: record._fields[0].properties.released
+            };
+            res.render('movie', {
+                movie: movie
+            });
+        });
+});
+
 app.post('/movie/add',function(req,res) {
   var title = req.body.title;
   var year = req.body.year;
@@ -79,7 +99,7 @@ app.post('/movie/actor/add',function(req,res) {
   var title = req.body.title;
   var name = req.body.name;
   session
-    .run('MATCH (p:Person {name:{nameParam}}),(m:Movie{title:{titleParam}}) MERGE (p)-[:ACTED_IN]-(m) RETURN p,m', {titleParam:title,nameParam:name})
+    .run('MATCH (p:Person {name:{nameParam}}),(m:Movie{title:{titleParam}}) MERGE (p)-[:ACTS_IN]-(m) RETURN p,m', {titleParam:title,nameParam:name})
     .then(function(result) {
       res.redirect('/');
       session.close();
