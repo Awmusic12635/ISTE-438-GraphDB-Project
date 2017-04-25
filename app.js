@@ -99,6 +99,62 @@ app.post('/person/add',function(req,res) {
     });
 });
 
+
+// delete
+app.post('/person/delete', function(req,res){
+var name = req.body.name;
+  session
+    .run('DELETE (n:Person {name:{nameParam}}) RETURN n.namematch (n:Person {name:{nameParam}}) detach delete n', {nameParam:name})
+    .then(function(result) {
+      res.redirect('/');
+      session.close();
+    })
+    .catch(function(err) {
+      console.log(err)
+    });
+});
+app.post('/movie/delete',function(req,res) {
+  var title = req.body.title;
+  var year = req.body.year;
+  session
+    .run('DELETE (n:Movie {title:{titleParam},released:{yearParam}}) detach delete n', {titleParam:title,yearParam:year})
+    .then(function(result) {
+      res.redirect('/');
+      session.close();
+    })
+    .catch(function(err) {
+      console.log(err)
+    });
+});
+
+app.post('/movie/actor/delete',function(req,res) {
+  var title = req.body.title;
+  var name = req.body.name;
+  session
+    .run('MATCH (:Person {name:{nameParam}})-[a:ACTED_IN]-(:Movie{title:{titleParam}}) detach delete a', {titleParam:title,nameParam:name})
+    .then(function(result) {
+      res.redirect('/');
+      session.close();
+    })
+    .catch(function(err) {
+      console.log(err)
+    });
+});
+
+app.post('/movie/director/delete',function(req,res) {
+  var title = req.body.title;
+  var name = req.body.name;
+  session
+    .run('MATCH (:Person {name:{nameParam}})-[a:DIRECTED]-(:Movie{title:{titleParam}}) detach delete a', {titleParam:title,nameParam:name})
+    .then(function(result) {
+      res.redirect('/');
+      session.close();
+    })
+    .catch(function(err) {
+      console.log(err)
+    });
+});
+
 app.listen(3000);
 console.log('Server Started on Port 3000');
 
