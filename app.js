@@ -197,6 +197,7 @@ app.post('/movie/:id/edit',function(req,res) {
   var runtime = req.body.runtime;
   var description = req.body.description;
   var language = req.body.language;
+  var trailer = req.body.trailer;
   var genre = req.body.genre;
   session
     .run('MATCH(n:Movie) where ID(n)={idParam}'+ 
