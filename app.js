@@ -62,19 +62,29 @@ app.get('/movie/:id',function(req,res) {
     var movieid = req.params.id;
     console.log("Movie ID: " + movieid);
     session
-        .run('MATCH(n:Movie) where ID(n)={idParam} RETURN n',{idParam:movieid})
+        .run('MATCH(n:Movie) where ID(n)=toInteger({idParam}) RETURN n',{idParam:parseInt(movieid)})
         .then(function(result) {
             console.log("finished search");
-            console.dir(result[0]);
-            var record = result[0];
+            //console.log(result['records']);
+            var record = result['records'][0];
             var movie = {
                 id: record._fields[0].identity.low,
                 title: record._fields[0].properties.title,
-                year: record._fields[0].properties.released
+                studio: record._fields[0].properties.studio,
+                runtime: record._fields[0].properties.runtime,
+                description:record._fields[0].properties.description,
+                language:record._fields[0].properties.language,
+                trailer:record._fields[0].properties.trailer,
+                genre:record._fields[0].properties.genre,
+                imageUrl: record._fields[0].properties.imageUrl
+
             };
             res.render('movie', {
                 movie: movie
             });
+        })
+        .catch(function(err) {
+            console.log(err)
         });
 });
 
