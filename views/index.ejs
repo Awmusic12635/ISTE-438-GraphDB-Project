@@ -1,0 +1,43 @@
+<h3>Add Movie</h3>
+<form method="post" action="/movie/add">
+  <label>Movie Title</label><br>
+  <input type="text" name="title">
+  <br>
+  <label>Year</label><br>
+  <input type="text" name="year">
+  <br><br>
+  <input type="submit" value="submit">
+</form>
+
+<h3>Add Person</h3>
+<form method="post" action="/person/add">
+  <label>Person Name</label><br>
+  <input type="text" name="name">
+  <br><br>
+  <input type="submit" value="submit">
+</form>
+
+<h3>Add Actor to Movie</h3>
+<form method="post" action="/movie/actor/add">
+  <label>Movie Title</label><br>
+  <input type="text" name="title">
+  <br>
+  <label>Actor Name</label><br>
+  <input type="text" name="name">
+  <br><br>
+  <input type="submit" value="submit">
+</form>
+
+<h3>Movies</h3>
+<ul>
+<% movies.forEach(function(movie) { %>
+   <li><%= movie.title %></li>
+<% }) %>
+</ul>
+
+<h3>Persons</h3>
+<ul>
+<% persons.forEach(function(person) { %>
+   <li><%= person.name %></li>
+<% }) %>
+</ul>
