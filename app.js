@@ -180,10 +180,33 @@ app.post('/movie/director/delete',function(req,res) {
 });
 
 // update stuff
-app.post('/movie/update',function(req,res) {
+app.post('/movie/:id/edit',function(req,res) {
+  var movieid = req.params.id;
   var title = req.body.title;
+  var studio = req.body.studio;
+  var runtime = req.body.runtime;
+  var description = req.body.description;
+  var language = req.body.language;
+  var genre = req.body.genre;
   session
-    .run('MATCH (m:Movie{title:{titleParam}}) set m.title = {titleParam}', {titleParam:title})
+    .run('MATCH(n:Movie) where ID(n)={idParam}' 
+		'SET n.title={titleParam}'
+		'SET n.studio={studioParam}'
+		'SET n.runtime={runtimeParam}'
+		'SET n.description={descriptionParam}'
+		'SET n.language={languageParam}'
+		'SET n.trailer={trailerParam}'
+		'SET n.genre={genreParam}',
+		{
+			idParam:movieid,
+			titleParam:title,
+			studioParam:studio, 
+			runtimeParam:runtime,
+			descriptionParam:description,
+			languageParam:language,
+			trailerParam:trailer,
+			genreParam:genre
+		})
     .then(function(result) {
       res.redirect('/');
       session.close();
