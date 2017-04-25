@@ -31,7 +31,7 @@
 <h3>Movies</h3>
 <ul>
 <% movies.forEach(function(movie) { %>
-   <li><%= movie.title %></li>
+   <li style="cursor: pointer;" onclick="window.location='/movie/<%= movie.id %>'"><%= movie.title %></li>
 <% }) %>
 </ul>
 
