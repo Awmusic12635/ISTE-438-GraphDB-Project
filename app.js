@@ -199,13 +199,13 @@ app.post('/movie/:id/edit',function(req,res) {
   var language = req.body.language;
   var genre = req.body.genre;
   session
-    .run('MATCH(n:Movie) where ID(n)={idParam}' 
-		'SET n.title={titleParam}'
-		'SET n.studio={studioParam}'
-		'SET n.runtime={runtimeParam}'
-		'SET n.description={descriptionParam}'
-		'SET n.language={languageParam}'
-		'SET n.trailer={trailerParam}'
+    .run('MATCH(n:Movie) where ID(n)={idParam}'+ 
+		'SET n.title={titleParam}'+
+		'SET n.studio={studioParam}' +
+		'SET n.runtime={runtimeParam}'+
+		'SET n.description={descriptionParam}'+
+		'SET n.language={languageParam}'+
+		'SET n.trailer={trailerParam}'+
 		'SET n.genre={genreParam}',
 		{
 			idParam:movieid,
