@@ -19,6 +19,8 @@ var driver = neo4j.driver('bolt://localhost',
     neo4j.auth.basic('neo4j','osboxes.org'));
 var session = driver.session();
 
+
+// get data
 app.get('/',function(req,res) {
   session
     .run('MATCH(n:Movie) RETURN n LIMIT 40')
@@ -58,6 +60,7 @@ app.get('/',function(req,res) {
     });
 });
 
+// add data
 app.post('/movie/add',function(req,res) {
   var title = req.body.title;
   var year = req.body.year;
@@ -113,6 +116,7 @@ var name = req.body.name;
       console.log(err)
     });
 });
+
 app.post('/movie/delete',function(req,res) {
   var title = req.body.title;
   var year = req.body.year;
@@ -146,6 +150,20 @@ app.post('/movie/director/delete',function(req,res) {
   var name = req.body.name;
   session
     .run('MATCH (:Person {name:{nameParam}})-[a:DIRECTED]-(:Movie{title:{titleParam}}) detach delete a', {titleParam:title,nameParam:name})
+    .then(function(result) {
+      res.redirect('/');
+      session.close();
+    })
+    .catch(function(err) {
+      console.log(err)
+    });
+});
+
+// update stuff
+app.post('/movie/update',function(req,res) {
+  var title = req.body.title;
+  session
+    .run('MATCH (m:Movie{title:{titleParam}}) set m.title = {titleParam}', {titleParam:title})
     .then(function(result) {
       res.redirect('/');
       session.close();
