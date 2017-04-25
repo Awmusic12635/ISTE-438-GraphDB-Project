@@ -132,7 +132,6 @@ app.post('/person/add',function(req,res) {
     });
 });
 
-<<<<<<< HEAD
 app.get('/path/:personOne/:personTwo',function(req,res) {
     var personOne = req.params.personOne;
     var personTwo = req.params.personTwo;
@@ -141,14 +140,14 @@ app.get('/path/:personOne/:personTwo',function(req,res) {
     session
 
 
-        .run('MATCH p=shortestPath((p1:Person {name:"' + personOne +'"})-[*]-(p2:Person {name:"' + personTwo +'"}) )RETURN p')
-        .then(function(result) {
+        .run('MATCH p=shortestPath((p1:Person {name:"' + personOne + '"})-[*]-(p2:Person {name:"' + personTwo + '"}) )RETURN p')
+        .then(function (result) {
             var movieArr = [];
             //console.log(result["records"][0]);
             //console.log(result["records"][0]._fields[0]);
             //console.log(result["records"][0]._fields[0].segments);
             var numOfSetps = result["records"][0]._fields[0].segments.length;
-            result["records"][0]._fields[0].segments.forEach(function(segment){
+            result["records"][0]._fields[0].segments.forEach(function (segment) {
                 console.log(segment)
             });
             //console.log(result);
@@ -156,11 +155,10 @@ app.get('/path/:personOne/:personTwo',function(req,res) {
         })
 
 
-        .catch(function(err) {
+        .catch(function (err) {
             console.log(err);
         });
-=======
-
+});
 // delete
 app.post('/person/delete', function(req,res){
 var name = req.body.name;
@@ -253,7 +251,6 @@ app.post('/movie/:id/edit',function(req,res) {
     .catch(function(err) {
       console.log(err)
     });
->>>>>>> 2da61ca60f7d9b69f4e74d84dd2a841c49a71245
 });
 
 app.listen(3000);
