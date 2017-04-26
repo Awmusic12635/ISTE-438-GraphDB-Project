@@ -185,7 +185,7 @@ app.get('/path/:personOne/:personTwo',function(req,res) {
             });
             //console.log(result);
             res.setHeader('Content-Type', 'application/json');
-            res.send(JSON.stringify(finalArr));
+            res.json(finalArr);
         })
 
 
