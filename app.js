@@ -28,9 +28,15 @@ app.get('/',function(req,res) {
       var movieArr = [];
       result.records.forEach(function(record) {
         movieArr.push({
-          id: record._fields[0].identity.low,
-          title: record._fields[0].properties.title,
-          year: record._fields[0].properties.released
+            id: record._fields[0].identity.low,
+            title: record._fields[0].properties.title,
+            studio: record._fields[0].properties.studio,
+            runtime: record._fields[0].properties.runtime,
+            description:record._fields[0].properties.description,
+            language:record._fields[0].properties.language,
+            trailer:record._fields[0].properties.trailer,
+            genre:record._fields[0].properties.genre,
+            imageUrl: record._fields[0].properties.imageUrl
         });
       });
 
