@@ -2,14 +2,18 @@
 
 <h3>Movie: <%= movie.title %></h3>
 <img src="<%= movie.imageUrl %>" alt="poster" />
+
+<form method="post" action="/movie/<%= movie.id %>/edit">
 <ul>
-    <li>Title: <%= movie.title %></li>
-    <li>Studio: <%= movie.studio %></li>
-    <li>Run Time: <%= movie.runtime %></li>
-    <li>Description: <%= movie.description %></li>
-    <li>Language: <%= movie.language %></li>
-    <li>Trailer: <%= movie.trailer %></li>
-    <li>Genre: <%= movie.genre %></li>
+    <li>Title: <input type="text" name="title" value="<%= movie.title %>" ></li>  
+    <li>Studio: <input type="text" name="studio" value="<%= movie.studio %></li>
+    <li>Run Time: <input type="text" name="runtime" value="<%= movie.runtime %></li>
+    <li>Description: <input type="text" name="description" value="<%= movie.description %></li>
+    <li>Language: <input type="text" name="language" value="<%= movie.language %></li>
+    <li>Trailer: <input type="text" name="trailer" value="<%= movie.trailer %></li>
+    <li>Genre: <input type="text" name="genre" value="<%= movie.genre %></li>
 </ul>
+  <input type="submit" value="submit">
+</form>
 
 
