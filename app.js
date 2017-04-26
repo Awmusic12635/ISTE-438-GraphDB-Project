@@ -28,9 +28,15 @@ app.get('/',function(req,res) {
       var movieArr = [];
       result.records.forEach(function(record) {
         movieArr.push({
-          id: record._fields[0].identity.low,
-          title: record._fields[0].properties.title,
-          year: record._fields[0].properties.released
+            id: record._fields[0].identity.low,
+            title: record._fields[0].properties.title,
+            studio: record._fields[0].properties.studio,
+            runtime: record._fields[0].properties.runtime,
+            description:record._fields[0].properties.description,
+            language:record._fields[0].properties.language,
+            trailer:record._fields[0].properties.trailer,
+            genre:record._fields[0].properties.genre,
+            imageUrl: record._fields[0].properties.imageUrl
         });
       });
 
@@ -142,16 +148,44 @@ app.get('/path/:personOne/:personTwo',function(req,res) {
 
         .run('MATCH p=shortestPath((p1:Person {name:"' + personOne + '"})-[*]-(p2:Person {name:"' + personTwo + '"}) )RETURN p')
         .then(function (result) {
-            var movieArr = [];
-            //console.log(result["records"][0]);
-            //console.log(result["records"][0]._fields[0]);
+            var finalArr = [];
             //console.log(result["records"][0]._fields[0].segments);
             var numOfSetps = result["records"][0]._fields[0].segments.length;
-            result["records"][0]._fields[0].segments.forEach(function (segment) {
-                console.log(segment)
+            result["records"][0]._fields[0].segments.forEach(function (segment, index, array) {
+                //console.log(segment.start.labels);
+                if ((segment.start.labels.indexOf("Movie") > -1)) {
+                    //console.log(segment.start.properties.title);
+                    finalArr.push({
+                        type: "Movie",
+                        name:segment.start.properties.title
+                    });
+                } else {
+                    //console.log(segment.start.properties.name);
+                    finalArr.push({
+                        type: "Actor",
+                        name:segment.start.properties.name
+                    });
+                }
+                if( index === array.length -1){
+                    console.log(segment.end.labels);
+                    if ((segment.end.labels.indexOf("Movie") > -1)) {
+                       // console.log(segment.end.properties.title);
+                        finalArr.push({
+                            type: "Movie",
+                            name:segment.end.properties.title
+                        });
+                    } else {
+                        //console.log(segment.end.properties.name);
+                        finalArr.push({
+                            type: "Actor",
+                            name:segment.end.properties.name
+                        });
+                    }
+                }
             });
             //console.log(result);
-
+            res.setHeader('Content-Type', 'application/json');
+            res.json(finalArr);
         })
 
 
