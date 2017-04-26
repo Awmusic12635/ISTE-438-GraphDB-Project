@@ -225,8 +225,9 @@ app.post('/movie/:id/edit',function(req,res) {
   var language = req.body.language;
   var trailer = req.body.trailer;
   var genre = req.body.genre;
+  console.log(movieid + title + studio + runtime);
   session
-    .run('MATCH(n:Movie) where ID(n)={idParam}'+ 
+    .run('MATCH(n:Movie) where ID(n)=toInteger({idParam})'+ 
 		'SET n.title={titleParam}'+
 		'SET n.studio={studioParam}' +
 		'SET n.runtime={runtimeParam}'+
