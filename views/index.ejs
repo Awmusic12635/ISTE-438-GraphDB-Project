@@ -7,6 +7,28 @@
 <script>
     $(document).ready(function(){
         $('#moviesTable').DataTable();
+        $('#shortbutton').on('click',function(){
+
+            personOne = $('#personone').val();
+            personTwo = $('#persontwo').val();
+
+            $.get( "/path/"+personOne+"/"+personTwo, function( data ) {
+                console.log(data);
+                var outputString = "";
+                data.forEach(function(item){
+                   outputString += item.name + " (" + item.type + ")<br/>";
+                });
+                $( "#shortoutput" ).html( outputString );
+            });
+        });
+
+        $('.clickButton').on('click',function(){
+
+            $.post( "/movie/delete",{'title':$(this).data('id')}, function( data ) {
+                console.log(data);
+                $('#deleteoutput').html(data);
+            });
+        });
     });
 </script>
 
@@ -51,11 +73,12 @@
             <th>Description</th>
             <th>Language</th>
             <th>Genre</th>
+            <th>Action</th>
         </tr>
     </thead>
     <tbody>
     <% movies.forEach(function(movie) { %>
-        <tr style="pointer:cursor;" onclick="window.location='/movie/<%= movie.id %>'">
+        <tr style="pointer:cursor;">
             <td><%= movie.id %></td>
             <td><%= movie.title %></td>
             <td><%= movie.studio %></td>
@@ -63,15 +86,31 @@
             <td><%= movie.description %></td>
             <td><%= movie.language %></td>
             <td><%= movie.genre %></td>
+            <td>
+                <button onclick="window.location='/movie/<%= movie.id %>'">View</button>
+                <button class="clickButton" data-id="<%= movie.title %>">Delete</button>
+            </td>
         </tr>
     <% }) %>
     </tbody>
 </table>
 
 
-<h3>Persons</h3>
-<ul>
-<% persons.forEach(function(person) { %>
-   <li><%= person.name %></li>
-<% }) %>
-</ul>
+<h3>People</h3>
+
+<select id="personone">
+    <% persons.forEach(function(person) { %>
+    <option value="<%= person.name %>"><%= person.name %></option>
+    <% }) %>
+</select>
+
+<select id="persontwo">
+    <% persons.forEach(function(person) { %>
+    <option value="<%= person.name %>"><%= person.name %></option>
+    <% }) %>
+</select>
+
+<button id="shortbutton">Find shortest Path</button>
+
+<div id="shortoutput"></div>
+<div id="deleteoutput"></div>

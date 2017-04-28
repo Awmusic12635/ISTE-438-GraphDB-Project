@@ -41,7 +41,7 @@ app.get('/',function(req,res) {
       });
 
       session
-        .run('MATCH (n:Person) RETURN n LIMIT 25')
+        .run('MATCH (n:Person) RETURN n LIMIT 100')
         .then(function(result2){
            var personArr = [];
            result2.records.forEach(function(record) {
@@ -162,7 +162,7 @@ app.get('/path/:personOne/:personTwo',function(req,res) {
                 } else {
                     //console.log(segment.start.properties.name);
                     finalArr.push({
-                        type: "Actor",
+                        type: "Person",
                         name:segment.start.properties.name
                     });
                 }
@@ -177,7 +177,7 @@ app.get('/path/:personOne/:personTwo',function(req,res) {
                     } else {
                         //console.log(segment.end.properties.name);
                         finalArr.push({
-                            type: "Actor",
+                            type: "Person",
                             name:segment.end.properties.name
                         });
                     }
@@ -199,24 +199,26 @@ var name = req.body.name;
   session
     .run('DELETE (n:Person {name:{nameParam}}) RETURN n.namematch (n:Person {name:{nameParam}}) detach delete n', {nameParam:name})
     .then(function(result) {
-      res.redirect('/');
+        res.status(200);
       session.close();
     })
     .catch(function(err) {
+        res.status(500).send({ error: 'Something failed!' })
       console.log(err)
     });
 });
 
 app.post('/movie/delete',function(req,res) {
   var title = req.body.title;
-  var year = req.body.year;
+  console.log(title);
   session
-    .run('DELETE (n:Movie {title:{titleParam},released:{yearParam}}) detach delete n', {titleParam:title,yearParam:year})
+    .run('MATCH (n:Movie {title:{titleParam}}) detach delete n', {titleParam:title})
     .then(function(result) {
-      res.redirect('/');
+        res.send("Success, Movie Deleted");
       session.close();
     })
     .catch(function(err) {
+        res.status(500).send({ error: 'Something failed!' });
       console.log(err)
     });
 });
